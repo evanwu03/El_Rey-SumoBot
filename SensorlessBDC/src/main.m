@@ -1,0 +1,91 @@
+function main()
+% Main function 
+evalin('base', 'clear');
+
+% Add dependencies 
+addpath('..\sim\');
+addpath('..\control\');
+addpath('..\models\');
+
+% Initialize parameters and call other functions as needed
+disp('Starting the main function...');
+
+%% Sampling Time 
+Fs = 9600;
+Ts = 1/Fs;
+
+%% Speed PI parameters
+Kp = 0.1;
+Ki = 20;
+pi_params = setup_pi_params(Kp, Ki, Ts); 
+
+%% Model of 2nd order system with fn = 1kHz
+
+fn = 1e3;                              % Natural frequency (Hz)
+wn = 2 * pi * fn;                      % Natural frequency (rad/s)
+zeta = 0.4;                            % Damping ratio
+
+% Transfer function coefficients
+num = wn^2;                            % Numerator: omega_n^2
+den = [1, 2*zeta*wn, wn^2];            % Denominator
+
+assignin('base', 'tf_num', num);       % Assign to base workspace
+assignin('base', 'tf_den', den);       % Simulink reads from base workspace
+
+%% Brushed DC motor model
+
+motor = motor_params(struct( ...
+    'Rs', 1.5,        ... % Armature resistance [Ohm]
+    'Ls',  1e-3,       ... % Armature inductance [H]
+    'J',  5e-7,      ... % Rotor inertia [kg·m^2]
+    'b',  4.92e-3,        ... % Viscous damping coefficient [N·m·s]
+    'k_e', 0.0337,       ... % Back EMF constant [V·s/rad]
+    'k_t', 0.0223,       ... % Torque constant [N·m/A]
+    'Ts', Ts        ... % Sample time [s]
+));
+
+
+%assignin("base", 'motor', motor);
+
+assignin("base", 'A', motor.Ad);
+assignin("base", 'B', motor.Bd);
+assignin("base", 'C', motor.Cd);
+assignin("base", 'D', motor.Dd);
+
+
+%% Luenberger State Observer Parameters 
+
+% Computer  Observer Gain Matrix L based on desired poles
+disp(eig(motor.Ad)); % Display discrete open loop poles 
+current_pole = 0.25; 
+speed_pole   = 0.3;
+observer_poles_dt = [current_pole, speed_pole];
+
+L = place(motor.Ad', motor.Cd', observer_poles_dt)';
+
+observer_params = struct( ...
+    'A', motor.Ad, ...
+    'B', motor.Bd, ...
+    'C', motor.Cd, ...
+    'D', motor.Dd, ...
+    'L', L);
+
+%% Robot parameters 
+robot_params = RobotPhysicalParams();
+
+
+%% Assign variables to workspace
+Simulink.Bus.createObject(pi_params);       %slBus1 Really out to be a better way to assign names
+Simulink.Bus.createObject(observer_params); %slBus2 
+Simulink.Bus.createObject(robot_params);    %slBus3
+assignin('base', 'observer_params', observer_params);
+assignin('base', 'pi_params', pi_params);
+assignin('base', 'Ts', Ts);
+assignin('base', 'robot_params', robot_params);
+%% Run simulation 
+model = 'SensorlessBDC';
+open_system(model);
+sim(model);
+
+disp("Simulation is finished running");
+end

@@ -1,0 +1,36 @@
+function motor = motor(params)
+%MOTOR_PARAMS Takes a motor struct and appends state-space matrices
+% Initialize state-space matrices
+
+arguments (Input) 
+    params (1,1) struct 
+end
+
+arguments (Output)
+    motor (1,1) struct
+end
+    motor.params = params;
+    motor.Ad = [];
+    motor.Bd = [];
+    motor.Cd = [];
+    motor.Dd = [];
+
+    % Convert continuous to discrete system using the specified sampling time
+    %sys_d = c2d(ss(motor.Ad, motor.Bd, motor.Cd, motor.Dd), params.Ts);
+
+    % A = [-b/j  k_t/j ; -k_e/L -Rs/L; 
+    % B = [  0; 
+    A = [-params.b/params.J,     params.k_t/params.J;
+         -params.k_e/params.L,  -params.Rs/params.L];
+    B = [0; 1/params.L];
+    C = [0, 1];
+    D = 0; % No feedforward 
+    
+    motor.Ad = A; 
+    motor.Bd = B;
+    motor.Cd = C;
+    motor.Dd = D;
+
+    %%sys_d = c2d(ss(A,B,C,D), params.Ts);
+    
+end

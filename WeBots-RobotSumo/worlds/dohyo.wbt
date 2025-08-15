@@ -1,0 +1,23 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "../protos/Dohyo_mini.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/Floor.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation 0.16052509861678715 -0.09437338282072788 -0.982509723783456 4.78589429993724
+  position -0.05757895146685957 -1.9080902922372693 0.6386198439800971
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Dohyo_mini {
+  hidden translation_0 0.0027746633129172703 0.005323870316879371 0.01586353758513073
+  hidden rotation_0 -2.2864699261411005e-05 -7.425981287137791e-05 -0.9999999969813428 0.012804103697137572
+}
+Floor {
+}

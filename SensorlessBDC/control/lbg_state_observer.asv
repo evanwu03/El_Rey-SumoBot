@@ -1,0 +1,25 @@
+function [xhat_next, y_hat] = lbg_state_observer(u, xhat, y, observer)
+%LBG_STATE_OBSERVER Summary of this function goes here
+%   Detailed explanation goes here
+assert(all(isfield(observer, {'A','B','C','D','k_e','k_t','Ts'})), ...
+    'motor_params:MissingFields', 'Required motor parameter(s) missing');
+
+rguments (Input)
+    u
+    xhat
+    y
+    observer (1,1) struct
+end
+
+arguments (Output)
+    xhat_hat
+    yhat
+end
+
+% Calculate Observer Gain Matrix L 
+%L = place
+yhat = observer.C*xhat;
+xhat_next = observer.A*xhat + observer.B*u - L*(y - yhat);
+
+
+end
