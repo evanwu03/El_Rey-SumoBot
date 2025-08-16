@@ -8,16 +8,142 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.16052509861678715 -0.09437338282072788 -0.982509723783456 4.78589429993724
-  position -0.05757895146685957 -1.9080902922372693 0.6386198439800971
+  orientation -0.09640076446020311 -0.1568715237626606 0.9829029543367288 4.624884156539046
+  position 0.004842778584270707 1.290799565951779 0.39443782258583354
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
-Dohyo_mini {
-  hidden translation_0 0.0027746633129172703 0.005323870316879371 0.01586353758513073
-  hidden rotation_0 -2.2864699261411005e-05 -7.425981287137791e-05 -0.9999999969813428 0.012804103697137572
+DEF Body Dohyo_mini {
+  hidden translation_0 0.002803346148947365 0.005378851471538284 0.015648583984391208
+  hidden rotation_0 0.0012275598146619783 -0.0006298179848759989 -0.9999990482126508 0.012804115841262483
 }
 Floor {
+}
+Robot {
+  translation -2.7571499350384376e-07 -5.315924913206859e-07 0.02904091843499424
+  rotation 0.8867884285629375 -0.46217556707546714 -0.00016782534378675576 1.773914401143291e-05
+  children [
+    Solid {
+      translation -0.015 0.046 0.07
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 1 0 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.005 0.005 0.005
+          }
+        }
+      ]
+      name "solid(3)"
+    }
+    Solid {
+      translation 0.015 0.046 0.07
+      children [
+        DEF eye Shape {
+          appearance PBRAppearance {
+            baseColor 1 0 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.005 0.005 0.005
+          }
+        }
+      ]
+      name "solid(2)"
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 3.0357228030414207e-16
+        anchor -0.05 0 0.037
+      }
+      device [
+        RotationalMotor {
+          name "Motor2"
+        }
+      ]
+      endPoint Solid {
+        translation -0.05 0 0.037
+        rotation -2.4569988428114527e-16 1 -2.1858122815050843e-16 1.5708003061004259
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 1 0 0
+              roughness 1
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.01
+              radius 0.025
+            }
+          }
+        ]
+        name "solid(1)"
+        boundingObject USE wheel
+        physics DEF wheel_physics Physics {
+        }
+        linearVelocity -5.50743752997043e-11 -1.056729525341351e-10 -3.5374291785463437e-09
+        angularVelocity 5.069713708374733e-12 -2.639738518951981e-12 -2.003476134739061e-16
+      }
+    }
+    DEF Body Pose {
+      translation 0 0 0.0515
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 1
+            roughness 1
+            metalness 0
+          }
+          geometry Cylinder {
+            height 0.08
+            radius 0.045
+          }
+        }
+      ]
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 1.1809331985472981e-15
+        anchor 0.05 0 0.037
+      }
+      device [
+        RotationalMotor {
+          name "Motor1"
+        }
+      ]
+      endPoint Solid {
+        translation 0.05 0 0.037
+        rotation -4.97014024441715e-16 1 -4.767499999569366e-16 1.5707996938995743
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 1 0 0
+              roughness 1
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.01
+              radius 0.025
+            }
+          }
+        ]
+        boundingObject USE wheel
+        physics DEF wheel_physics Physics {
+        }
+        linearVelocity -5.507443234331142e-11 -1.0567297515361818e-10 -3.5371652349154965e-09
+        angularVelocity 5.084523622542987e-12 -2.6397981085067236e-12 -2.1331347564628497e-16
+      }
+    }
+  ]
+  boundingObject USE Body
+  physics Physics {
+  }
+  linearVelocity -5.511269823454099e-11 -1.0574651660774292e-10 -3.5373881424276956e-09
+  angularVelocity 5.0711296467000415e-12 -2.63851453117408e-12 -2.2594950741807866e-16
 }
